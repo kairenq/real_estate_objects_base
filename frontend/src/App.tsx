@@ -1,7 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { ThemeProvider, CssBaseline } from '@mui/material';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeModeProvider, useThemeMode } from './context/ThemeContext';
+import { lightTheme, darkTheme } from './theme/theme';
 import Navbar from './components/Navbar';
 import PrivateRoute from './components/PrivateRoute';
 import Login from './components/Login';
@@ -9,29 +11,22 @@ import Register from './components/Register';
 import RealEstateList from './pages/RealEstateList';
 import MyObjects from './pages/MyObjects';
 import AdminPanel from './pages/AdminPanel';
+import Home from './pages/Home';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
-  },
-});
+const AppContent: React.FC = () => {
+  const { isDarkMode } = useThemeMode();
 
-const App: React.FC = () => {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <AuthProvider>
         <Router>
           <Navbar />
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/" element={<RealEstateList />} />
+            <Route path="/catalog" element={<RealEstateList />} />
             <Route
               path="/my-objects"
               element={
@@ -52,6 +47,14 @@ const App: React.FC = () => {
         </Router>
       </AuthProvider>
     </ThemeProvider>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <ThemeModeProvider>
+      <AppContent />
+    </ThemeModeProvider>
   );
 };
 
