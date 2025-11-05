@@ -88,6 +88,30 @@ npm run dev
 
 Приложение откроется на http://localhost:3000
 
+## 🚀 Деплой в продакшн
+
+Готовы к деплою на Render (backend) и Netlify (frontend)?
+
+**Быстрый старт**: см. [QUICK_DEPLOY.md](QUICK_DEPLOY.md) (10 минут)
+
+**Подробный гайд**: см. [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
+
+### В кратце:
+
+1. **Backend на Render**:
+   - Создать Web Service
+   - Подключить GitHub
+   - Настроить environment variables
+   - Автоматический деплой при push
+
+2. **Frontend на Netlify**:
+   - Импортировать проект
+   - Установить `VITE_API_URL`
+   - Автоматическая сборка и деплой
+
+3. **Связать вместе**:
+   - Добавить Netlify URL в `ALLOWED_ORIGINS` на Render
+
 ## Тестовые учетные данные
 
 После инициализации базы данных доступны следующие учетные записи:

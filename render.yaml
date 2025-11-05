@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: real-estate-api
+    runtime: python
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && python init_db.py && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 30
+      - key: DATABASE_URL
+        value: sqlite:///./real_estate.db
+      - key: PYTHON_VERSION
+        value: 3.11.0

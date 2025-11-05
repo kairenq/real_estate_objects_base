@@ -9,7 +9,8 @@ import type {
   UpdateRealEstateRequest,
 } from '../types';
 
-const API_URL = 'http://localhost:8000/api';
+// Получаем API URL из переменной окружения или используем localhost по умолчанию
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 // Создаем экземпляр axios с базовой конфигурацией
 const api = axios.create({
