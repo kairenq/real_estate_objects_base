@@ -77,7 +77,7 @@ const Navbar: React.FC = () => {
             }}
             onClick={() => navigate('/')}
           >
-            RealEstate
+            База Недвижимости
           </Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
