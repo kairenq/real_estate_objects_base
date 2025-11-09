@@ -1,8 +1,8 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 
-// URL вашего приложения на Render (обновите после деплоя)
-const APP_URL = process.env.APP_URL || 'https://your-app.onrender.com';
+// URL вашего приложения на Render
+const APP_URL = process.env.APP_URL || 'https://real-estate-objects-base.onrender.com';
 
 let mainWindow;
 

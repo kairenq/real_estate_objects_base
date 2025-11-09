@@ -40,31 +40,34 @@ npm run build:win
 
 ### Настройка URL сервера
 
-По умолчанию приложение подключается к `https://your-app.onrender.com`
+По умолчанию приложение подключается к `https://real-estate-objects-base.onrender.com`
 
 **Чтобы изменить URL:**
 
 1. Откройте файл `electron/main.js`
 2. Найдите строку:
    ```javascript
-   const APP_URL = process.env.APP_URL || 'https://your-app.onrender.com';
+   const APP_URL = process.env.APP_URL || 'https://real-estate-objects-base.onrender.com';
    ```
-3. Замените URL на адрес вашего Render деплоя
+3. Замените URL на нужный адрес
 4. Сохраните и пересоберите приложение
 
 **Или используйте переменную окружения:**
 ```bash
-set APP_URL=https://your-actual-app.onrender.com
+set APP_URL=https://your-custom-url.com
 npm start
 ```
 
 ## 📦 Автоматическая сборка через GitHub Actions
 
-При push в ветку `main` или создании тега:
+При push в ветку `main`, `claude/*` или создании тега:
 
 1. GitHub Actions автоматически соберет .exe файл
 2. Файл будет доступен в разделе **Actions** → **Artifacts**
 3. При создании тега (например, `v1.0.0`) создастся Release с .exe
+
+### Ручной запуск сборки:
+Перейдите в **Actions** → **Build Desktop Application** → **Run workflow**
 
 ### Создание релиза:
 ```bash

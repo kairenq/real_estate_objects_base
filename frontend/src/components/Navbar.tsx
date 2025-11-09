@@ -26,13 +26,14 @@ import {
   Favorite,
   Chat,
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useThemeMode } from '../context/ThemeContext';
 import { messagesAPI } from '../services/api';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const theme = useTheme();
   const { user, logout, isAdmin } = useAuth();
   const { isDarkMode, toggleTheme } = useThemeMode();
@@ -46,6 +47,13 @@ const Navbar: React.FC = () => {
       return () => clearInterval(interval);
     }
   }, [user]);
+
+  // Обновляем счетчик при изменении маршрута
+  useEffect(() => {
+    if (user) {
+      loadUnreadCount();
+    }
+  }, [location.pathname, user]);
 
   const loadUnreadCount = async () => {
     try {
