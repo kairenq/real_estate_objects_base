@@ -154,7 +154,7 @@ const Messages: React.FC = () => {
                           sx={{
                             p: 1.5,
                             maxWidth: '70%',
-                            bgcolor: isOwn ? 'primary.main' : 'grey.200',
+                            bgcolor: isOwn ? 'primary.main' : (theme) => theme.palette.mode === 'dark' ? 'grey.800' : 'grey.200',
                             color: isOwn ? 'white' : 'text.primary',
                           }}
                         >

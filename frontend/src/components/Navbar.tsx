@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -13,6 +13,7 @@ import {
   Divider,
   useTheme,
   alpha,
+  Badge,
 } from '@mui/material';
 import {
   AdminPanelSettings,
@@ -28,6 +29,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useThemeMode } from '../context/ThemeContext';
+import { messagesAPI } from '../services/api';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -35,6 +37,25 @@ const Navbar: React.FC = () => {
   const { user, logout, isAdmin } = useAuth();
   const { isDarkMode, toggleTheme } = useThemeMode();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [unreadCount, setUnreadCount] = React.useState(0);
+
+  useEffect(() => {
+    if (user) {
+      loadUnreadCount();
+      const interval = setInterval(loadUnreadCount, 30000); // обновление каждые 30 сек
+      return () => clearInterval(interval);
+    }
+  }, [user]);
+
+  const loadUnreadCount = async () => {
+    try {
+      const conversations = await messagesAPI.getConversations();
+      const total = conversations.reduce((sum, conv) => sum + (conv.unread_count || 0), 0);
+      setUnreadCount(total);
+    } catch (error) {
+      console.error('Failed to load unread count:', error);
+    }
+  };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -120,18 +141,29 @@ const Navbar: React.FC = () => {
                 >
                   Избранное
                 </Button>
-                <Button
-                  color="inherit"
-                  onClick={() => navigate('/messages')}
-                  startIcon={<Chat />}
+                <Badge
+                  badgeContent={unreadCount}
+                  color="error"
                   sx={{
-                    '&:hover': {
-                      backgroundColor: alpha(theme.palette.common.white, 0.1),
-                    },
+                    '& .MuiBadge-badge': {
+                      right: -3,
+                      top: 3,
+                    }
                   }}
                 >
-                  Сообщения
-                </Button>
+                  <Button
+                    color="inherit"
+                    onClick={() => navigate('/messages')}
+                    startIcon={<Chat />}
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: alpha(theme.palette.common.white, 0.1),
+                      },
+                    }}
+                  >
+                    Сообщения
+                  </Button>
+                </Badge>
                 {isAdmin && (
                   <Button
                     color="inherit"
