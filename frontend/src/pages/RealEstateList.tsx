@@ -28,12 +28,18 @@ import {
   CalendarToday,
   Search,
   FilterList,
+  Chat,
 } from '@mui/icons-material';
-import { realEstateAPI } from '../services/api';
+import { realEstateAPI, messagesAPI } from '../services/api';
 import type { RealEstateObject } from '../types';
+import FavoriteButton from '../components/FavoriteButton';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const RealEstateList: React.FC = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [objects, setObjects] = useState<RealEstateObject[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -104,6 +110,20 @@ const RealEstateList: React.FC = () => {
       currency: 'RUB',
       minimumFractionDigits: 0,
     }).format(price);
+  };
+
+  const handleContactSeller = async (realEstateId: number) => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      await messagesAPI.createConversation({ real_estate_id: realEstateId });
+      navigate('/messages');
+    } catch (error) {
+      console.error('Failed to create conversation:', error);
+    }
   };
 
   if (loading) {
@@ -276,6 +296,8 @@ const RealEstateList: React.FC = () => {
                       position: 'absolute',
                       top: 16,
                       right: 16,
+                      display: 'flex',
+                      gap: 1,
                     }}
                   >
                     <Chip
@@ -287,6 +309,15 @@ const RealEstateList: React.FC = () => {
                         backdropFilter: 'blur(10px)',
                       }}
                     />
+                  </Box>
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 8,
+                      left: 8,
+                    }}
+                  >
+                    <FavoriteButton realEstateId={obj.id} />
                   </Box>
                 </CardActionArea>
                 <CardContent sx={{ flexGrow: 1, p: 2.5 }}>
@@ -391,6 +422,18 @@ const RealEstateList: React.FC = () => {
                       />
                     )}
                   </Box>
+
+                  {user && obj.owner_id !== user.id && (
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      startIcon={<Chat />}
+                      onClick={() => handleContactSeller(obj.id)}
+                      sx={{ mt: 2 }}
+                    >
+                      Написать продавцу
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             </Grid>

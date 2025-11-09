@@ -12,6 +12,8 @@ import RealEstateList from './pages/RealEstateList';
 import MyObjects from './pages/MyObjects';
 import AdminPanel from './pages/AdminPanel';
 import Home from './pages/Home';
+import Favorites from './pages/Favorites';
+import Messages from './pages/Messages';
 
 const AppContent: React.FC = () => {
   const { isDarkMode } = useThemeMode();
@@ -32,6 +34,22 @@ const AppContent: React.FC = () => {
               element={
                 <PrivateRoute>
                   <MyObjects />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/favorites"
+              element={
+                <PrivateRoute>
+                  <Favorites />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                <PrivateRoute>
+                  <Messages />
                 </PrivateRoute>
               }
             />

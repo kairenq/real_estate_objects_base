@@ -22,6 +22,8 @@ import {
   Logout,
   Business,
   Dashboard,
+  Favorite,
+  Chat,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -105,6 +107,30 @@ const Navbar: React.FC = () => {
                   }}
                 >
                   Мои объекты
+                </Button>
+                <Button
+                  color="inherit"
+                  onClick={() => navigate('/favorites')}
+                  startIcon={<Favorite />}
+                  sx={{
+                    '&:hover': {
+                      backgroundColor: alpha(theme.palette.common.white, 0.1),
+                    },
+                  }}
+                >
+                  Избранное
+                </Button>
+                <Button
+                  color="inherit"
+                  onClick={() => navigate('/messages')}
+                  startIcon={<Chat />}
+                  sx={{
+                    '&:hover': {
+                      backgroundColor: alpha(theme.palette.common.white, 0.1),
+                    },
+                  }}
+                >
+                  Сообщения
                 </Button>
                 {isAdmin && (
                   <Button

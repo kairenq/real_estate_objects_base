@@ -102,4 +102,85 @@ export const realEstateAPI = {
   },
 };
 
+// Bookings API
+export const bookingsAPI = {
+  create: async (data: import('../types').CreateBookingRequest): Promise<import('../types').Booking> => {
+    const response = await api.post<import('../types').Booking>('/bookings/', data);
+    return response.data;
+  },
+
+  getMyBookings: async (): Promise<import('../types').Booking[]> => {
+    const response = await api.get<import('../types').Booking[]>('/bookings/my');
+    return response.data;
+  },
+
+  getPropertyBookings: async (propertyId: number): Promise<import('../types').Booking[]> => {
+    const response = await api.get<import('../types').Booking[]>(`/bookings/property/${propertyId}`);
+    return response.data;
+  },
+
+  updateStatus: async (bookingId: number, data: import('../types').UpdateBookingRequest): Promise<import('../types').Booking> => {
+    const response = await api.put<import('../types').Booking>(`/bookings/${bookingId}`, data);
+    return response.data;
+  },
+
+  getAll: async (): Promise<import('../types').Booking[]> => {
+    const response = await api.get<import('../types').Booking[]>('/bookings/');
+    return response.data;
+  },
+
+  delete: async (bookingId: number): Promise<void> => {
+    await api.delete(`/bookings/${bookingId}`);
+  },
+};
+
+// Favorites API
+export const favoritesAPI = {
+  add: async (data: import('../types').CreateFavoriteRequest): Promise<import('../types').Favorite> => {
+    const response = await api.post<import('../types').Favorite>('/favorites/', data);
+    return response.data;
+  },
+
+  getAll: async (): Promise<import('../types').Favorite[]> => {
+    const response = await api.get<import('../types').Favorite[]>('/favorites/');
+    return response.data;
+  },
+
+  remove: async (realEstateId: number): Promise<void> => {
+    await api.delete(`/favorites/${realEstateId}`);
+  },
+
+  check: async (realEstateId: number): Promise<{ is_favorite: boolean }> => {
+    const response = await api.get<{ is_favorite: boolean }>(`/favorites/check/${realEstateId}`);
+    return response.data;
+  },
+};
+
+// Messages API
+export const messagesAPI = {
+  createConversation: async (data: import('../types').CreateConversationRequest): Promise<import('../types').Conversation> => {
+    const response = await api.post<import('../types').Conversation>('/messages/conversations', data);
+    return response.data;
+  },
+
+  getConversations: async (): Promise<import('../types').Conversation[]> => {
+    const response = await api.get<import('../types').Conversation[]>('/messages/conversations');
+    return response.data;
+  },
+
+  sendMessage: async (data: import('../types').CreateMessageRequest): Promise<import('../types').Message> => {
+    const response = await api.post<import('../types').Message>('/messages/', data);
+    return response.data;
+  },
+
+  getMessages: async (conversationId: number): Promise<import('../types').Message[]> => {
+    const response = await api.get<import('../types').Message[]>(`/messages/conversation/${conversationId}`);
+    return response.data;
+  },
+
+  markAsRead: async (messageId: number): Promise<void> => {
+    await api.put(`/messages/${messageId}/read`);
+  },
+};
+
 export default api;
