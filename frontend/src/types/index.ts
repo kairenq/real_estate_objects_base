@@ -20,6 +20,7 @@ export interface RealEstateObject {
   floor?: number;
   total_floors?: number;
   year_built?: number;
+  images?: string[];
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -55,6 +56,7 @@ export interface CreateRealEstateRequest {
   floor?: number;
   total_floors?: number;
   year_built?: number;
+  images?: string[];
 }
 
 export interface UpdateRealEstateRequest {
@@ -69,6 +71,7 @@ export interface UpdateRealEstateRequest {
   floor?: number;
   total_floors?: number;
   year_built?: number;
+  images?: string[];
   is_active?: boolean;
 }
 

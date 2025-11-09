@@ -89,7 +89,11 @@ const Favorites: React.FC = () => {
                     <CardMedia
                       component="img"
                       height="200"
-                      image={getPropertyImage(obj.property_type)}
+                      image={
+                        obj.images && obj.images.length > 0
+                          ? `${import.meta.env.VITE_API_URL}${obj.images[0]}`
+                          : getPropertyImage(obj.property_type)
+                      }
                       alt={obj.title}
                       sx={{ cursor: 'pointer' }}
                       onClick={() => navigate('/catalog')}

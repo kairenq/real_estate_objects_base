@@ -19,6 +19,7 @@ class RealEstateObject(Base):
     floor = Column(Integer)
     total_floors = Column(Integer)
     year_built = Column(Integer)
+    images = Column(Text)  # JSON список URL изображений
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

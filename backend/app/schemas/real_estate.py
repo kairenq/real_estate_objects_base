@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 
@@ -15,6 +15,7 @@ class RealEstateBase(BaseModel):
     floor: Optional[int] = None
     total_floors: Optional[int] = None
     year_built: Optional[int] = None
+    images: Optional[List[str]] = []
 
 
 class RealEstateCreate(RealEstateBase):
@@ -33,6 +34,7 @@ class RealEstateUpdate(BaseModel):
     floor: Optional[int] = None
     total_floors: Optional[int] = None
     year_built: Optional[int] = None
+    images: Optional[List[str]] = None
     is_active: Optional[bool] = None
 
 

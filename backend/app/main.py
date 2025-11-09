@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from app.database.database import engine, Base
-from app.routes import auth, users, real_estate, bookings, favorites, messages
+from app.routes import auth, users, real_estate, bookings, favorites, messages, upload
 from app.models import User, RealEstateObject, Booking, Favorite, Conversation, Message
 
 # Создание таблиц в БД
@@ -39,6 +39,15 @@ app.include_router(real_estate.router)
 app.include_router(bookings.router)
 app.include_router(favorites.router)
 app.include_router(messages.router)
+app.include_router(upload.router)
+
+# Создаем папку для загрузок если её нет
+STATIC_DIR = Path(__file__).parent.parent / "static"
+STATIC_DIR.mkdir(exist_ok=True)
+(STATIC_DIR / "uploads").mkdir(exist_ok=True)
+
+# Монтируем статические файлы для загруженных изображений
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
 @app.get("/api/health")

@@ -20,6 +20,7 @@ import {
 import { Add, Edit, Delete, LocationOn, Home, AttachMoney } from '@mui/icons-material';
 import { realEstateAPI } from '../services/api';
 import type { RealEstateObject, CreateRealEstateRequest } from '../types';
+import ImageUpload from '../components/ImageUpload';
 
 const MyObjects: React.FC = () => {
   const [objects, setObjects] = useState<RealEstateObject[]>([]);
@@ -37,6 +38,7 @@ const MyObjects: React.FC = () => {
     floor: 0,
     total_floors: 0,
     year_built: new Date().getFullYear(),
+    images: [],
   });
   const [error, setError] = useState('');
 
@@ -70,6 +72,7 @@ const MyObjects: React.FC = () => {
         floor: obj.floor,
         total_floors: obj.total_floors,
         year_built: obj.year_built,
+        images: obj.images || [],
       });
     } else {
       setEditingObject(null);
@@ -85,6 +88,7 @@ const MyObjects: React.FC = () => {
         floor: 0,
         total_floors: 0,
         year_built: new Date().getFullYear(),
+        images: [],
       });
     }
     setOpenDialog(true);
@@ -337,6 +341,16 @@ const MyObjects: React.FC = () => {
                 type="number"
                 value={formData.year_built}
                 onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="subtitle2" gutterBottom>
+                Изображения
+              </Typography>
+              <ImageUpload
+                value={formData.images || []}
+                onChange={(images) => setFormData({ ...formData, images })}
+                maxImages={10}
               />
             </Grid>
           </Grid>
