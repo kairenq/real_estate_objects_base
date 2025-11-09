@@ -1,0 +1,56 @@
+{
+  "name": "real-estate-desktop",
+  "version": "1.0.0",
+  "description": "База Недвижимости - Десктопное Приложение",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kairenq/real_estate_objects_base.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "dependencies": {},
+  "build": {
+    "appId": "com.realestate.app",
+    "productName": "База Недвижимости",
+    "copyright": "Copyright © 2024",
+    "publish": null,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js"
+    ],
+    "win": {
+      "target": "nsis",
+      "certificateFile": null,
+      "certificatePassword": null,
+      "sign": null
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "База Недвижимости"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "category": "public.app-category.utilities"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "Utility"
+    }
+  }
+}

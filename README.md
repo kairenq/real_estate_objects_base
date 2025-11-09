@@ -88,29 +88,62 @@ npm run dev
 
 Приложение откроется на http://localhost:3000
 
-## 🚀 Деплой в продакшн
+## 🚀 Деплой в продакшн на Render
 
-Готовы к деплою на Render (backend) и Netlify (frontend)?
+Проект настроен для **унифицированного деплоя** на Render (backend + frontend вместе).
 
 **Быстрый старт**: см. [QUICK_DEPLOY.md](QUICK_DEPLOY.md) (10 минут)
 
 **Подробный гайд**: см. [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
 
-### В кратце:
+### Как это работает:
 
-1. **Backend на Render**:
-   - Создать Web Service
-   - Подключить GitHub
-   - Настроить environment variables
-   - Автоматический деплой при push
+1. **Единый Web Service на Render**:
+   - FastAPI собирает и раздаёт статические файлы frontend
+   - Используется `render.yaml` для автоматической настройки
+   - При сборке устанавливается Node.js и собирается React
+   - API доступен по `/api/*`, frontend - по всем остальным путям
 
-2. **Frontend на Netlify**:
-   - Импортировать проект
-   - Установить `VITE_API_URL`
-   - Автоматическая сборка и деплой
+2. **Автоматический деплой**:
+   - Push в GitHub → автоматическая сборка на Render
+   - Не нужно настраивать CORS между доменами
+   - Всё работает на одном домене
 
-3. **Связать вместе**:
-   - Добавить Netlify URL в `ALLOWED_ORIGINS` на Render
+3. **Локальная сборка** (опционально):
+   - Windows: `build-fullstack.bat`
+   - Linux/macOS: `./build-fullstack.sh`
+
+## 🖥️ Десктопное приложение (Electron)
+
+Кроме веб-версии, доступно полноценное **десктопное приложение** для Windows, macOS и Linux.
+
+### Быстрый запуск:
+
+**Windows:**
+```bash
+start-desktop-app.bat
+```
+
+**Linux/macOS:**
+```bash
+cd electron && npm install && npm start
+```
+
+### Сборка установщика:
+
+**Windows:**
+```bash
+build-desktop-app.bat
+```
+
+Готовый `.exe` будет в `electron/dist/`
+
+### Автоматическая сборка через GitHub Actions:
+
+- При push в `main` - создаётся артефакт с .exe
+- При создании тега (например `v1.0.0`) - создаётся Release
+
+**Подробнее**: см. [electron/README.md](electron/README.md)
 
 ## Тестовые учетные данные
 
@@ -135,22 +168,35 @@ real_estate_objects_base/
 │   │   ├── models/        # Модели SQLAlchemy
 │   │   ├── routes/        # API endpoints
 │   │   ├── schemas/       # Pydantic схемы
-│   │   └── main.py        # Главный файл приложения
+│   │   └── main.py        # Главный файл приложения (+ раздача static)
 │   ├── init_db.py         # Инициализация БД
 │   ├── run.py             # Запуск сервера
 │   └── requirements.txt   # Зависимости Python
 ├── frontend/
 │   ├── src/
 │   │   ├── components/    # React компоненты
-│   │   ├── context/       # Context API
+│   │   ├── context/       # Context API (Auth, Theme)
 │   │   ├── pages/         # Страницы приложения
 │   │   ├── services/      # API сервисы
+│   │   ├── theme/         # Material-UI тема (light/dark)
 │   │   ├── types/         # TypeScript типы
 │   │   ├── App.tsx        # Главный компонент
 │   │   └── main.tsx       # Точка входа
 │   ├── index.html
 │   ├── package.json
 │   └── vite.config.ts
+├── electron/              # Десктопное приложение
+│   ├── main.js            # Главный процесс Electron
+│   ├── package.json       # Конфигурация и зависимости
+│   └── README.md          # Документация desktop app
+├── .github/
+│   └── workflows/
+│       └── build-desktop.yml  # Автосборка .exe
+├── render.yaml            # Конфигурация Render (fullstack)
+├── build-fullstack.bat    # Скрипт сборки для Windows
+├── build-fullstack.sh     # Скрипт сборки для Linux/macOS
+├── start-desktop-app.bat  # Запуск desktop app (Windows)
+├── build-desktop-app.bat  # Сборка .exe (Windows)
 └── README.md
 ```
 
