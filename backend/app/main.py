@@ -1,9 +1,10 @@
 import os
 from pathlib import Path
+from datetime import datetime
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from app.database.database import engine, Base
 from app.routes import auth, users, real_estate, bookings, favorites, messages, upload
 from app.models import User, RealEstateObject, Booking, Favorite, Conversation, Message
@@ -50,9 +51,30 @@ STATIC_DIR.mkdir(exist_ok=True)
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
+@app.get("/health")
+@app.head("/health")
+async def health_check():
+    """Health check endpoint для uptime мониторинга"""
+    return JSONResponse(
+        content={
+            "status": "ok",
+            "timestamp": datetime.utcnow().isoformat(),
+            "service": "Real Estate Management System"
+        },
+        status_code=200
+    )
+
 @app.get("/api/health")
-def health_check():
-    return {"status": "healthy"}
+@app.head("/api/health")
+async def api_health_check():
+    """Дополнительный health check endpoint"""
+    return JSONResponse(
+        content={
+            "status": "ok",
+            "timestamp": datetime.utcnow().isoformat()
+        },
+        status_code=200
+    )
 
 
 # Путь к собранному frontend
