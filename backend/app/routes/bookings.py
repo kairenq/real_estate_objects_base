@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from app.database.database import get_db
-from app.core.security import get_current_user, get_current_admin_user
+from app.routes.auth import get_current_user, get_current_admin_user
 from app.models import Booking, RealEstateObject, User
 from app.schemas.booking import BookingCreate, BookingResponse, BookingUpdate
 

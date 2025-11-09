@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_, and_
 from typing import List
 from app.database.database import get_db
-from app.core.security import get_current_user
+from app.routes.auth import get_current_user
 from app.models import Conversation, Message, RealEstateObject, User
 from app.schemas.message import ConversationCreate, ConversationResponse, MessageCreate, MessageResponse
 

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from typing import List
 from app.database.database import get_db
-from app.core.security import get_current_user
+from app.routes.auth import get_current_user
 from app.models import Favorite, RealEstateObject, User
 from app.schemas.favorite import FavoriteCreate, FavoriteResponse
 
