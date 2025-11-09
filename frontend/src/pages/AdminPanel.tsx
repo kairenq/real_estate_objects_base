@@ -88,13 +88,13 @@ const AdminPanel: React.FC = () => {
       field: 'is_admin',
       headerName: 'Админ',
       width: 100,
-      valueGetter: (params) => (params ? 'Да' : 'Нет'),
+      valueGetter: (params) => (params.value ? 'Да' : 'Нет'),
     },
     {
       field: 'is_active',
       headerName: 'Активен',
       width: 100,
-      valueGetter: (params) => (params ? 'Да' : 'Нет'),
+      valueGetter: (params) => (params.value ? 'Да' : 'Нет'),
     },
     {
       field: 'actions',
@@ -128,7 +128,7 @@ const AdminPanel: React.FC = () => {
           style: 'currency',
           currency: 'RUB',
           minimumFractionDigits: 0,
-        }).format(params),
+        }).format(params.value),
     },
     { field: 'area', headerName: 'Площадь (м²)', width: 120 },
     { field: 'rooms', headerName: 'Комнат', width: 100 },
@@ -136,7 +136,7 @@ const AdminPanel: React.FC = () => {
       field: 'is_active',
       headerName: 'Активен',
       width: 100,
-      valueGetter: (params) => (params ? 'Да' : 'Нет'),
+      valueGetter: (params) => (params.value ? 'Да' : 'Нет'),
     },
     {
       field: 'actions',

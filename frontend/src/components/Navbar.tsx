@@ -15,7 +15,6 @@ import {
   alpha,
 } from '@mui/material';
 import {
-  AccountCircle,
   AdminPanelSettings,
   Brightness4,
   Brightness7,

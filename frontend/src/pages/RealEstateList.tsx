@@ -22,7 +22,6 @@ import {
 import {
   LocationOn,
   Home,
-  AttachMoney,
   SquareFoot,
   MeetingRoom,
   Layers,
