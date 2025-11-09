@@ -1,10 +1,27 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, session } = require('electron');
 const path = require('path');
 
 // URL вашего приложения на Render
 const APP_URL = process.env.APP_URL || 'https://real-estate-objects-base.onrender.com';
 
 let mainWindow;
+
+// Настройка сессии перед созданием окна
+app.whenReady().then(() => {
+  // Очищаем кеш и данные при запуске для чистой сессии
+  const ses = session.defaultSession;
+
+  // Устанавливаем User-Agent чтобы сайт не думал что это бот
+  ses.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 RealEstateDesktop/1.0');
+
+  createWindow();
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+});
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -19,13 +36,50 @@ function createWindow() {
       contextIsolation: true,
       enableRemoteModule: false,
       webSecurity: true,
+      partition: 'persist:realestate', // Используем постоянную сессию
     },
     backgroundColor: '#1976d2',
     show: false,
   });
 
+  // Блокируем навигацию на внешние сайты (например, render.com dashboard)
+  mainWindow.webContents.on('will-navigate', (event, navigationUrl) => {
+    const parsedUrl = new URL(navigationUrl);
+    const targetHost = parsedUrl.hostname;
+    const appHost = new URL(APP_URL).hostname;
+
+    // Разрешаем только навигацию внутри нашего домена
+    if (targetHost !== appHost && !navigationUrl.startsWith('data:')) {
+      event.preventDefault();
+      console.log('Blocked navigation to:', navigationUrl);
+
+      // Если это render.com или другой внешний сайт - игнорируем
+      if (targetHost.includes('render.com') && !navigationUrl.includes(appHost)) {
+        console.log('Blocked Render dashboard redirect');
+        return;
+      }
+    }
+  });
+
+  // Блокируем открытие новых окон
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    const parsedUrl = new URL(url);
+    const targetHost = parsedUrl.hostname;
+    const appHost = new URL(APP_URL).hostname;
+
+    // Если это наш домен - открываем в том же окне
+    if (targetHost === appHost) {
+      mainWindow.loadURL(url);
+    }
+
+    // Блокируем все внешние окна
+    return { action: 'deny' };
+  });
+
   // Загружаем веб-приложение с Render
-  mainWindow.loadURL(APP_URL);
+  mainWindow.loadURL(APP_URL, {
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+  });
 
   // Показываем окно когда контент загружен
   mainWindow.once('ready-to-show', () => {
@@ -95,6 +149,15 @@ function createWindow() {
     `);
   });
 
+  // Логируем загрузку страниц для отладки
+  mainWindow.webContents.on('did-navigate', (event, url) => {
+    console.log('Navigated to:', url);
+  });
+
+  mainWindow.webContents.on('did-navigate-in-page', (event, url) => {
+    console.log('Navigated in page to:', url);
+  });
+
   // Создаем меню приложения
   const menuTemplate = [
     {
@@ -111,6 +174,15 @@ function createWindow() {
           label: 'Перезагрузить',
           accelerator: 'CmdOrCtrl+R',
           click: () => {
+            mainWindow.loadURL(APP_URL);
+          },
+        },
+        { type: 'separator' },
+        {
+          label: 'Очистить кеш и перезагрузить',
+          click: async () => {
+            await session.defaultSession.clearCache();
+            await session.defaultSession.clearStorageData();
             mainWindow.loadURL(APP_URL);
           },
         },
@@ -176,17 +248,6 @@ function createWindow() {
     mainWindow = null;
   });
 }
-
-// Запуск приложения
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
-});
 
 // Выход когда все окна закрыты (кроме macOS)
 app.on('window-all-closed', () => {
