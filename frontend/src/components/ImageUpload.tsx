@@ -91,6 +91,16 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value = [], onChange, maxImag
     }
   };
 
+  // Helper function to get full image URL
+  const getImageUrl = (url: string) => {
+    // If URL is absolute (starts with http:// or https://), use as is (Cloudinary)
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    // Otherwise, prepend API URL (local storage)
+    return `${import.meta.env.VITE_API_URL}${url}`;
+  };
+
   return (
     <Box>
       <Grid container spacing={2} sx={{ mb: 2 }}>
@@ -106,7 +116,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value = [], onChange, maxImag
             >
               <Box
                 component="img"
-                src={`${import.meta.env.VITE_API_URL}${imageUrl}`}
+                src={getImageUrl(imageUrl)}
                 alt="Preview"
                 sx={{
                   position: 'absolute',
