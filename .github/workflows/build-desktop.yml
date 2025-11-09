@@ -40,7 +40,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: База-Недвижимости-Windows
+          name: Real-Estate-Desktop-Windows
           path: electron/dist/*.exe
           if-no-files-found: error
 
