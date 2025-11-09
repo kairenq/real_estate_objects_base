@@ -13,5 +13,5 @@ python-dotenv==1.0.0
 # Email validation for Pydantic EmailStr
 email-validator==2.1.0
 
-# Cloud storage for images
-cloudinary==1.36.0
+# Image processing
+Pillow==10.1.0

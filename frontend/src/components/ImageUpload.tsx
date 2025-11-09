@@ -91,21 +91,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value = [], onChange, maxImag
     }
   };
 
-  // Helper function to get full image URL
-  const getImageUrl = (url: string) => {
-    // If URL is absolute (starts with http:// or https://), use as is (Cloudinary)
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-      return url;
-    }
-    // Otherwise, prepend API URL (local storage)
-    return `${import.meta.env.VITE_API_URL}${url}`;
-  };
-
   return (
     <Box>
       <Grid container spacing={2} sx={{ mb: 2 }}>
-        {value.map((imageUrl) => (
-          <Grid item xs={6} sm={4} md={3} key={imageUrl}>
+        {value.map((imageUrl, index) => (
+          <Grid item xs={6} sm={4} md={3} key={`${imageUrl.substring(0, 50)}-${index}`}>
             <Paper
               sx={{
                 position: 'relative',
@@ -116,7 +106,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value = [], onChange, maxImag
             >
               <Box
                 component="img"
-                src={getImageUrl(imageUrl)}
+                src={imageUrl}
                 alt="Preview"
                 sx={{
                   position: 'absolute',

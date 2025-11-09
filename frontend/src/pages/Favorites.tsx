@@ -91,7 +91,7 @@ const Favorites: React.FC = () => {
                       height="200"
                       image={
                         obj.images && obj.images.length > 0
-                          ? (obj.images[0].startsWith('http') ? obj.images[0] : `${import.meta.env.VITE_API_URL}${obj.images[0]}`)
+                          ? obj.images[0]
                           : getPropertyImage(obj.property_type)
                       }
                       alt={obj.title}
