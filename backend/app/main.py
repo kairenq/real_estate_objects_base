@@ -5,8 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from app.database.database import engine, Base
-from app.routes import auth, users, real_estate
-from app.models import User, RealEstateObject
+from app.routes import auth, users, real_estate, bookings, favorites, messages
+from app.models import User, RealEstateObject, Booking, Favorite, Conversation, Message
 
 # Создание таблиц в БД
 Base.metadata.create_all(bind=engine)
@@ -36,6 +36,9 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(real_estate.router)
+app.include_router(bookings.router)
+app.include_router(favorites.router)
+app.include_router(messages.router)
 
 
 @app.get("/api/health")

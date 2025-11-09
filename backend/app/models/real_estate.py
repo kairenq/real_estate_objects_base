@@ -24,5 +24,8 @@ class RealEstateObject(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
-    # Relationship
+    # Relationships
     owner = relationship("User", backref="properties")
+    bookings = relationship("Booking", back_populates="real_estate", cascade="all, delete-orphan")
+    favorites = relationship("Favorite", back_populates="real_estate", cascade="all, delete-orphan")
+    conversations = relationship("Conversation", back_populates="real_estate", cascade="all, delete-orphan")
