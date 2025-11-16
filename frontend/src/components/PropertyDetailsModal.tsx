@@ -11,7 +11,7 @@ import {
   Button,
   styled
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material Close';
+import CloseIcon from '@mui/icons-material/Close';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
