@@ -72,6 +72,11 @@ const RealEstateList: React.FC = () => {
     loadObjects();
   }, []);
 
+  // Автоматическая фильтрация при изменении главной категории
+  useEffect(() => {
+    loadObjects();
+  }, [filters.main_category]);
+
   const loadObjects = async () => {
     try {
       setLoading(true);

@@ -30,22 +30,24 @@ interface PropertyDetailsModalProps {
   property: RealEstateObject;
 }
 
-const ImageGallery = styled(Box)({
+const ImageGallery = styled(Box)(({ theme }) => ({
   position: 'relative',
   width: '100%',
   height: '400px',
-  backgroundColor: '#f5f5f5',
+  backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f5f5f5',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   overflow: 'hidden',
   borderRadius: '8px',
-});
+}));
 
 const GalleryImage = styled('img')({
   maxWidth: '100%',
   maxHeight: '100%',
-  objectFit: 'contain',
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
 });
 
 const NavigationButton = styled(IconButton)({
@@ -263,8 +265,23 @@ export const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({
         </Box>
 
         {/* Address */}
-        <Box sx={{ mb: 2, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
-          <Typography variant="body2" color="text.secondary">
+        <Box
+          sx={{
+            mb: 2,
+            p: 2,
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'dark'
+                ? 'rgba(255, 255, 255, 0.05)'
+                : 'rgba(0, 0, 0, 0.03)',
+            borderRadius: 1,
+            border: (theme) => `1px solid ${
+              theme.palette.mode === 'dark'
+                ? 'rgba(255, 255, 255, 0.1)'
+                : 'rgba(0, 0, 0, 0.08)'
+            }`
+          }}
+        >
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
             <strong>Адрес:</strong>
           </Typography>
           <Typography variant="body1">
