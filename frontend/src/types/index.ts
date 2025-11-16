@@ -11,6 +11,7 @@ export interface RealEstateObject {
   id: number;
   title: string;
   description?: string;
+  main_category: string;  // Жилая или Коммерческая
   property_type: string;
   address: string;
   city: string;
@@ -47,6 +48,7 @@ export interface AuthResponse {
 export interface CreateRealEstateRequest {
   title: string;
   description?: string;
+  main_category: string;
   property_type: string;
   address: string;
   city: string;
@@ -62,6 +64,7 @@ export interface CreateRealEstateRequest {
 export interface UpdateRealEstateRequest {
   title?: string;
   description?: string;
+  main_category?: string;
   property_type?: string;
   address?: string;
   city?: string;

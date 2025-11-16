@@ -10,7 +10,8 @@ class RealEstateObject(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     description = Column(Text)
-    property_type = Column(String, nullable=False)  # квартира, дом, коммерческая и т.д.
+    main_category = Column(String, nullable=False, default="Жилая")  # Жилая или Коммерческая
+    property_type = Column(String, nullable=False)  # квартира, дом, офис и т.д.
     address = Column(String, nullable=False)
     city = Column(String, nullable=False)
     price = Column(Float, nullable=False)
@@ -19,7 +20,7 @@ class RealEstateObject(Base):
     floor = Column(Integer)
     total_floors = Column(Integer)
     year_built = Column(Integer)
-    images = Column(Text)  # JSON список URL изображений
+    images = Column(Text)  # JSON список base64 изображений
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

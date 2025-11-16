@@ -29,6 +29,7 @@ const MyObjects: React.FC = () => {
   const [formData, setFormData] = useState<CreateRealEstateRequest>({
     title: '',
     description: '',
+    main_category: 'Жилая',
     property_type: 'Квартира',
     address: '',
     city: '',
@@ -42,7 +43,17 @@ const MyObjects: React.FC = () => {
   });
   const [error, setError] = useState('');
 
-  const propertyTypes = ['Квартира', 'Дом', 'Коммерческая'];
+  const mainCategories = ['Жилая', 'Коммерческая'];
+
+  // Динамически определяем типы недвижимости в зависимости от главной категории
+  const getPropertyTypes = () => {
+    if (formData.main_category === 'Жилая') {
+      return ['Квартира', 'Дом'];
+    } else if (formData.main_category === 'Коммерческая') {
+      return ['Офис', 'Торговая площадь'];
+    }
+    return ['Квартира', 'Дом'];
+  };
 
   useEffect(() => {
     loadMyObjects();
@@ -63,6 +74,7 @@ const MyObjects: React.FC = () => {
       setFormData({
         title: obj.title,
         description: obj.description || '',
+        main_category: obj.main_category,
         property_type: obj.property_type,
         address: obj.address,
         city: obj.city,
@@ -79,6 +91,7 @@ const MyObjects: React.FC = () => {
       setFormData({
         title: '',
         description: '',
+        main_category: 'Жилая',
         property_type: 'Квартира',
         address: '',
         city: '',
@@ -102,10 +115,21 @@ const MyObjects: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.type === 'number' ? parseFloat(e.target.value) : e.target.value;
-    setFormData({
+    const newFormData: any = {
       ...formData,
       [e.target.name]: value,
-    });
+    };
+
+    // Если изменилась главная категория, сбрасываем тип недвижимости
+    if (e.target.name === 'main_category') {
+      if (value === 'Жилая') {
+        newFormData.property_type = 'Квартира';
+      } else if (value === 'Коммерческая') {
+        newFormData.property_type = 'Офис';
+      }
+    }
+
+    setFormData(newFormData);
   };
 
   const handleSubmit = async () => {
@@ -186,12 +210,19 @@ const MyObjects: React.FC = () => {
                       </IconButton>
                     </Box>
                   </Box>
-                  <Chip
-                    label={obj.property_type}
-                    size="small"
-                    icon={<Home />}
-                    sx={{ mb: 1 }}
-                  />
+                  <Box sx={{ mb: 1, display: 'flex', gap: 0.5 }}>
+                    <Chip
+                      label={obj.main_category}
+                      size="small"
+                      color="primary"
+                    />
+                    <Chip
+                      label={obj.property_type}
+                      size="small"
+                      icon={<Home />}
+                      variant="outlined"
+                    />
+                  </Box>
                   <Typography variant="body2" color="text.secondary" gutterBottom>
                     {obj.description}
                   </Typography>
@@ -249,13 +280,30 @@ const MyObjects: React.FC = () => {
               <TextField
                 fullWidth
                 select
+                label="Категория"
+                name="main_category"
+                value={formData.main_category}
+                onChange={handleChange}
+                required
+              >
+                {mainCategories.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                select
                 label="Тип недвижимости"
                 name="property_type"
                 value={formData.property_type}
                 onChange={handleChange}
                 required
               >
-                {propertyTypes.map((type) => (
+                {getPropertyTypes().map((type) => (
                   <MenuItem key={type} value={type}>
                     {type}
                   </MenuItem>

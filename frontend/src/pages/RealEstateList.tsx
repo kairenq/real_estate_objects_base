@@ -18,6 +18,8 @@ import {
   useTheme,
   alpha,
   CardActionArea,
+  ToggleButton,
+  ToggleButtonGroup,
 } from '@mui/material';
 import {
   LocationOn,
@@ -29,12 +31,16 @@ import {
   Search,
   FilterList,
   Chat,
+  HomeWork,
+  Business,
 } from '@mui/icons-material';
 import { realEstateAPI, messagesAPI } from '../services/api';
 import type { RealEstateObject } from '../types';
 import FavoriteButton from '../components/FavoriteButton';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { PropertyDetailsModal } from '../components/PropertyDetailsModal';
+import { getPropertyImage } from '../utils/propertyImages';
 
 const RealEstateList: React.FC = () => {
   const theme = useTheme();
@@ -43,22 +49,23 @@ const RealEstateList: React.FC = () => {
   const [objects, setObjects] = useState<RealEstateObject[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
+    main_category: '',
     city: '',
     property_type: '',
     min_price: '',
     max_price: '',
   });
+  const [selectedProperty, setSelectedProperty] = useState<RealEstateObject | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const propertyTypes = ['Квартира', 'Дом', 'Коммерческая'];
-
-  // Placeholder изображения для разных типов недвижимости
-  const getPropertyImage = (propertyType: string) => {
-    const images = {
-      'Квартира': 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80',
-      'Дом': 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80',
-      'Коммерческая': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80',
-    };
-    return images[propertyType as keyof typeof images] || images['Квартира'];
+  // Типы недвижимости в зависимости от главной категории
+  const getPropertyTypes = () => {
+    if (filters.main_category === 'Жилая') {
+      return ['Квартира', 'Дом'];
+    } else if (filters.main_category === 'Коммерческая') {
+      return ['Офис', 'Торговая площадь'];
+    }
+    return ['Квартира', 'Дом', 'Офис', 'Торговая площадь'];
   };
 
   useEffect(() => {
@@ -69,6 +76,7 @@ const RealEstateList: React.FC = () => {
     try {
       setLoading(true);
       const params: any = {};
+      if (filters.main_category) params.main_category = filters.main_category;
       if (filters.city) params.city = filters.city;
       if (filters.property_type) params.property_type = filters.property_type;
       if (filters.min_price) params.min_price = parseFloat(filters.min_price);
@@ -90,18 +98,40 @@ const RealEstateList: React.FC = () => {
     });
   };
 
+  const handleMainCategoryChange = (
+    _event: React.MouseEvent<HTMLElement>,
+    newCategory: string | null
+  ) => {
+    setFilters({
+      ...filters,
+      main_category: newCategory || '',
+      property_type: '', // Сброс типа при смене категории
+    });
+  };
+
   const handleApplyFilters = () => {
     loadObjects();
   };
 
   const handleResetFilters = () => {
     setFilters({
+      main_category: '',
       city: '',
       property_type: '',
       min_price: '',
       max_price: '',
     });
     setTimeout(() => loadObjects(), 0);
+  };
+
+  const handleImageClick = (property: RealEstateObject) => {
+    setSelectedProperty(property);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedProperty(null);
   };
 
   const formatPrice = (price: number) => {
@@ -171,6 +201,40 @@ const RealEstateList: React.FC = () => {
             Фильтры поиска
           </Typography>
         </Box>
+
+        {/* Главные категории */}
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: 600 }}>
+            Категория недвижимости
+          </Typography>
+          <ToggleButtonGroup
+            value={filters.main_category}
+            exclusive
+            onChange={handleMainCategoryChange}
+            aria-label="main category"
+            fullWidth
+            sx={{
+              '& .MuiToggleButton-root': {
+                py: 1.5,
+                textTransform: 'none',
+                fontSize: '1rem',
+                fontWeight: 500,
+              },
+            }}
+          >
+            <ToggleButton value="Жилая" aria-label="residential">
+              <HomeWork sx={{ mr: 1 }} />
+              Жилая недвижимость
+            </ToggleButton>
+            <ToggleButton value="Коммерческая" aria-label="commercial">
+              <Business sx={{ mr: 1 }} />
+              Коммерческая недвижимость
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Box>
+
+        <Divider sx={{ my: 2 }} />
+
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={3}>
             <TextField
@@ -196,7 +260,7 @@ const RealEstateList: React.FC = () => {
               size="small"
             >
               <MenuItem value="">Все типы</MenuItem>
-              {propertyTypes.map((type) => (
+              {getPropertyTypes().map((type) => (
                 <MenuItem key={type} value={type}>
                   {type}
                 </MenuItem>
@@ -281,7 +345,7 @@ const RealEstateList: React.FC = () => {
                   },
                 }}
               >
-                <CardActionArea>
+                <CardActionArea onClick={() => handleImageClick(obj)}>
                   <CardMedia
                     component="img"
                     height="200"
@@ -293,6 +357,7 @@ const RealEstateList: React.FC = () => {
                     alt={obj.title}
                     sx={{
                       objectFit: 'cover',
+                      cursor: 'pointer',
                     }}
                   />
                   <Box
@@ -301,9 +366,21 @@ const RealEstateList: React.FC = () => {
                       top: 16,
                       right: 16,
                       display: 'flex',
+                      flexDirection: 'column',
                       gap: 1,
                     }}
                   >
+                    <Chip
+                      label={obj.main_category}
+                      color="primary"
+                      size="small"
+                      sx={{
+                        bgcolor: alpha(theme.palette.primary.main, 0.95),
+                        color: 'white',
+                        fontWeight: 600,
+                        backdropFilter: 'blur(10px)',
+                      }}
+                    />
                     <Chip
                       label={obj.property_type}
                       size="small"
@@ -320,6 +397,7 @@ const RealEstateList: React.FC = () => {
                       top: 8,
                       left: 8,
                     }}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <FavoriteButton realEstateId={obj.id} />
                   </Box>
@@ -443,6 +521,15 @@ const RealEstateList: React.FC = () => {
             </Grid>
           ))}
         </Grid>
+      )}
+
+      {/* Property Details Modal */}
+      {selectedProperty && (
+        <PropertyDetailsModal
+          open={modalOpen}
+          onClose={handleCloseModal}
+          property={selectedProperty}
+        />
       )}
     </Container>
   );

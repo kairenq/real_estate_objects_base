@@ -6,6 +6,7 @@ from datetime import datetime
 class RealEstateBase(BaseModel):
     title: str
     description: Optional[str] = None
+    main_category: str = "Жилая"  # Жилая или Коммерческая
     property_type: str
     address: str
     city: str
@@ -25,6 +26,7 @@ class RealEstateCreate(RealEstateBase):
 class RealEstateUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
+    main_category: Optional[str] = None
     property_type: Optional[str] = None
     address: Optional[str] = None
     city: Optional[str] = None

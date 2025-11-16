@@ -18,6 +18,7 @@ def object_to_response(obj: RealEstateObject) -> dict:
         "id": obj.id,
         "title": obj.title,
         "description": obj.description,
+        "main_category": obj.main_category,
         "property_type": obj.property_type,
         "address": obj.address,
         "city": obj.city,
@@ -40,6 +41,7 @@ def object_to_response(obj: RealEstateObject) -> dict:
 def get_real_estate_objects(
     skip: int = 0,
     limit: int = 100,
+    main_category: Optional[str] = None,
     city: Optional[str] = None,
     property_type: Optional[str] = None,
     min_price: Optional[float] = None,
@@ -49,6 +51,8 @@ def get_real_estate_objects(
     """Получение списка объектов недвижимости с фильтрами"""
     query = db.query(RealEstateObject).filter(RealEstateObject.is_active == True)
 
+    if main_category:
+        query = query.filter(RealEstateObject.main_category == main_category)
     if city:
         query = query.filter(RealEstateObject.city.ilike(f"%{city}%"))
     if property_type:
