@@ -7,19 +7,6 @@ from app.models.user import User
 from app.models.real_estate import RealEstateObject
 from app.core.security import get_password_hash
 
-# Простые тестовые изображения в base64 (маленькие цветные квадраты)
-# Изображение для квартир (голубой)
-APARTMENT_IMAGE = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCABkAGQDAREAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAACQgKB//EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AKpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/9k="
-
-# Изображение для домов (зеленый)
-HOUSE_IMAGE = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCABkAGQDAREAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAACQgKB//EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AKpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/9k="
-
-# Изображение для офисов (оранжевый)
-OFFICE_IMAGE = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCABkAGQDAREAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAACQgKB//EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AKpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/9k="
-
-# Изображение для магазинов (фиолетовый)
-RETAIL_IMAGE = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCABkAGQDAREAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAACQgKB//EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AKpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/9k="
-
 
 def init_db():
     # Создание таблиц
@@ -76,7 +63,7 @@ def init_db():
                 floor=5,
                 total_floors=10,
                 year_built=2020,
-                images=json.dumps([APARTMENT_IMAGE, APARTMENT_IMAGE]),
+                images=json.dumps([]),
                 owner_id=admin.id
             ),
             RealEstateObject(
@@ -92,7 +79,7 @@ def init_db():
                 floor=12,
                 total_floors=25,
                 year_built=2023,
-                images=json.dumps([APARTMENT_IMAGE]),
+                images=json.dumps([]),
                 owner_id=admin.id
             ),
             RealEstateObject(
@@ -108,7 +95,7 @@ def init_db():
                 floor=3,
                 total_floors=9,
                 year_built=2010,
-                images=json.dumps([APARTMENT_IMAGE, APARTMENT_IMAGE, APARTMENT_IMAGE]),
+                images=json.dumps([]),
                 owner_id=test_user.id
             ),
 
@@ -126,7 +113,7 @@ def init_db():
                 floor=2,
                 total_floors=2,
                 year_built=2018,
-                images=json.dumps([HOUSE_IMAGE, HOUSE_IMAGE]),
+                images=json.dumps([]),
                 owner_id=admin.id
             ),
             RealEstateObject(
@@ -142,7 +129,7 @@ def init_db():
                 floor=3,
                 total_floors=3,
                 year_built=2022,
-                images=json.dumps([HOUSE_IMAGE, HOUSE_IMAGE, HOUSE_IMAGE]),
+                images=json.dumps([]),
                 owner_id=test_user.id
             ),
 
@@ -159,7 +146,7 @@ def init_db():
                 floor=5,
                 total_floors=15,
                 year_built=2019,
-                images=json.dumps([OFFICE_IMAGE, OFFICE_IMAGE]),
+                images=json.dumps([]),
                 owner_id=admin.id
             ),
             RealEstateObject(
@@ -174,7 +161,7 @@ def init_db():
                 floor=7,
                 total_floors=12,
                 year_built=2021,
-                images=json.dumps([OFFICE_IMAGE]),
+                images=json.dumps([]),
                 owner_id=test_user.id
             ),
 
@@ -191,7 +178,7 @@ def init_db():
                 floor=1,
                 total_floors=2,
                 year_built=2015,
-                images=json.dumps([RETAIL_IMAGE, RETAIL_IMAGE, RETAIL_IMAGE]),
+                images=json.dumps([]),
                 owner_id=admin.id
             ),
             RealEstateObject(
@@ -206,7 +193,7 @@ def init_db():
                 floor=2,
                 total_floors=3,
                 year_built=2017,
-                images=json.dumps([RETAIL_IMAGE, RETAIL_IMAGE]),
+                images=json.dumps([]),
                 owner_id=test_user.id
             ),
         ]
