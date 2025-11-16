@@ -14,6 +14,23 @@ app.whenReady().then(() => {
   // Устанавливаем User-Agent чтобы сайт не думал что это бот
   ses.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 RealEstateDesktop/1.0');
 
+  // Настраиваем CSP для разрешения загрузки изображений с Unsplash
+  ses.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [
+          "default-src 'self' " + APP_URL + "; " +
+          "img-src 'self' data: https: blob: " + APP_URL + " https://images.unsplash.com; " +
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval' " + APP_URL + "; " +
+          "style-src 'self' 'unsafe-inline' " + APP_URL + "; " +
+          "connect-src 'self' " + APP_URL + " https://images.unsplash.com; " +
+          "font-src 'self' data: " + APP_URL + ";"
+        ]
+      }
+    });
+  });
+
   createWindow();
 
   app.on('activate', () => {

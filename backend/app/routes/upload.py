@@ -53,26 +53,30 @@ async def upload_images(
     Загрузка изображений и конвертация в base64 data URI
     Изображения хранятся в базе данных, не требуют внешних сервисов
     """
+    if not files:
+        raise HTTPException(status_code=400, detail="Файлы не предоставлены")
+
     uploaded_data_uris = []
+    errors = []
 
     for file in files:
         try:
             # Проверка что это изображение
             if not file.content_type or not file.content_type.startswith('image/'):
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Файл {file.filename} не является изображением"
-                )
+                errors.append(f"Файл {file.filename} не является изображением (тип: {file.content_type})")
+                continue
 
             # Читаем содержимое
             content = await file.read()
 
+            if not content or len(content) == 0:
+                errors.append(f"Файл {file.filename} пустой")
+                continue
+
             # Проверка размера
             if len(content) > MAX_FILE_SIZE:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Файл {file.filename} слишком большой. Максимум 5MB"
-                )
+                errors.append(f"Файл {file.filename} слишком большой ({len(content)} байт). Максимум 5MB")
+                continue
 
             # Оптимизируем и конвертируем в base64
             base64_string, mime_type = optimize_image(content)
@@ -82,13 +86,16 @@ async def upload_images(
 
             uploaded_data_uris.append(data_uri)
 
-        except HTTPException:
-            raise
         except Exception as e:
-            raise HTTPException(
-                status_code=500,
-                detail=f"Ошибка обработки файла {file.filename}: {str(e)}"
-            )
+            errors.append(f"Ошибка обработки файла {file.filename}: {str(e)}")
+            continue
+
+    # Если ни один файл не загружен успешно
+    if not uploaded_data_uris and errors:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Не удалось загрузить изображения. Ошибки: {'; '.join(errors)}"
+        )
 
     return uploaded_data_uris
 
