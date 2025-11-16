@@ -3,8 +3,8 @@ export const getPropertyImage = (propertyType: string): string => {
   const images: Record<string, string> = {
     'Квартира': 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80',
     'Дом': 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80',
-    'Офис': 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&q=80',
-    'Торговая площадь': 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800&q=80',
+    'Офис': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80',
+    'Торговая площадь': 'https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?w=800&q=80',
     'Коммерческая': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80',
   };
   return images[propertyType] || images['Квартира'];
