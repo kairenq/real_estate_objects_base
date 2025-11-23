@@ -154,8 +154,8 @@ const RealEstateList: React.FC = () => {
     }
 
     try {
-      await messagesAPI.createConversation({ real_estate_id: realEstateId });
-      navigate('/messages');
+      const conversation = await messagesAPI.createConversation({ real_estate_id: realEstateId });
+      navigate(`/messages?conversation=${conversation.id}`);
     } catch (error) {
       console.error('Failed to create conversation:', error);
     }

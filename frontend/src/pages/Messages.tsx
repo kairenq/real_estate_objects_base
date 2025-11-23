@@ -4,9 +4,11 @@ import { Send, Chat } from '@mui/icons-material';
 import { messagesAPI } from '../services/api';
 import type { Conversation, Message } from '../types';
 import { useAuth } from '../context/AuthContext';
+import { useSearchParams } from 'react-router-dom';
 
 const Messages: React.FC = () => {
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConv, setSelectedConv] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -18,6 +20,17 @@ const Messages: React.FC = () => {
     const interval = setInterval(loadConversations, 5000); // обновление каждые 5 сек
     return () => clearInterval(interval);
   }, []);
+
+  // Автоматически открыть диалог из URL
+  useEffect(() => {
+    const conversationId = searchParams.get('conversation');
+    if (conversationId && conversations.length > 0 && !selectedConv) {
+      const conv = conversations.find(c => c.id === parseInt(conversationId));
+      if (conv) {
+        setSelectedConv(conv);
+      }
+    }
+  }, [conversations, searchParams, selectedConv]);
 
   useEffect(() => {
     if (selectedConv) {
